@@ -1,0 +1,31 @@
+
+{% extends 'flatpages/default.html' %} <!--  наследуемся от шаблона default.html, который создавали для flatpages -->
+
+{% load custom_filters %} <!-- Загружаем фильтры (чтобы использовать фильтр "ЦЕНЗОР") -->
+
+
+{% block title %}
+Post Details            <!-- Название у нас будет Post Details -->
+{% endblock title %}
+
+
+{% block content %} <!-- В контенте на странице мы выводим саму публикацию, идентификатор которой был передан в url -->
+
+    <table>
+            <tr>
+               <td>Название</td>
+               <td>Содержание</td>
+               <td>Дата публикации</td>
+            </tr>
+
+            <tr>
+               <td>{{ post_detail.post_title | censor }}</td>
+                 <!-- Добавим специальный фильтр "Цензор" для цензурирования непотребных слов.
+                Все остальные символы превратятся в многоточие. -->
+               <td>{{ post_detail.post_text | censor }}</td>
+               <td>{{ post_detail.creation_date | date:'d.M.Y' }}</td>
+           </tr>
+
+    </table>
+
+{% endblock content %}
