@@ -79,6 +79,14 @@ class Post(models.Model):
         pre_text = 124 if len(self.post_text) > 124 else len(self.post_text)
         return self.post_text[:pre_text]+'...'
 
+    def preview20(self):
+        '''
+        Метод возвращает начало статьи (предварительный просмотр)
+        длиной 124 символа и добавляет многоточие в конце.
+        '''
+        pre_text = 20 if len(self.post_text) > 20 else len(self.post_text)
+        return self.post_text[:pre_text]+'...'
+
 
 class PostCategory(models.Model):
     '''
