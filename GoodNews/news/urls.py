@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import PostList, PostDetail
+from .views import PostList, PostDetail, Search, PostCreateView, PostDeleteView, PostUpdateView
 
 urlpatterns = [
     # path — означает путь.
@@ -27,4 +27,9 @@ urlpatterns = [
     # pk — это первичный ключ товара, который будет выводиться у нас в шаблон
     # int — указывает на то, что принимаются только целочисленные значения
     path('<int:pk>', PostDetail.as_view(), name='post_detail'),
+    # добавим путь
+    path('search', Search.as_view(), name='search_list'),
+    path('add', PostCreateView.as_view(), name='add'),  # Ссылка на создание товара
+    path('edit/<int:pk>', PostUpdateView.as_view(), name='post_update'),
+    path('delete/<int:pk>', PostDeleteView.as_view(), name='post_delete')
 ]
