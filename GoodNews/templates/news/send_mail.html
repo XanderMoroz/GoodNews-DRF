@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ subject }}</title>
+</head>
+<body>
+<center>Дорогой {{ new_post.author.user }},</center>
+<br>
+
+Новый пост в категории {% for cat in new_post.categories.all %} {{ cat.category_name }} {% endfor %}
+на портале GoodNews: <b>
+    <br> <center> <a href= "http://127.0.0.1:8000/news/{{ my_post.id }}">{{new_post.post_title}}</a> </center> </b>
+        <br>
+
+    <hr>
+    <p>
+
+
+       <center> {{new_post.post_text|truncatechars:100}}</center>
+        <center><a href= "http://127.0.0.1:8000/news/{{ new_post.id }}">Продолжить чтение</a></center>
+
+    </p>
+</body>
+
+</html>
