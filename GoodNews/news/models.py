@@ -29,6 +29,9 @@ class Author(models.Model):
         self.save()
         return f'{self.user_rating}'
 
+    def __str__(self):
+        return f'{self.user}'
+
 class Category(models.Model):
     '''
     Модель Category — темы, которые они отражают (спорт, политика, образование и т. д.).
@@ -36,6 +39,9 @@ class Category(models.Model):
     - название категории. Поле должно быть уникальным (параметр unique = True).
     '''
     category_name = models.CharField(max_length=256, unique=True)
+
+    def __str__(self):
+        return f'{self.category_name}'
 
 class Post(models.Model):
     '''
@@ -56,6 +62,12 @@ class Post(models.Model):
     post_title = models.CharField(max_length=255)
     post_text = models.TextField()
     post_rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.post_title} {self.author}'
+
+    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
+        return f'/news/{self.id}'
 
     def like(self):
         '''
@@ -82,7 +94,7 @@ class Post(models.Model):
     def preview20(self):
         '''
         Метод возвращает начало статьи (предварительный просмотр)
-        длиной 124 символа и добавляет многоточие в конце.
+        длиной 20 символов и добавляет многоточие в конце.
         '''
         pre_text = 20 if len(self.post_text) > 20 else len(self.post_text)
         return self.post_text[:pre_text]+'...'
