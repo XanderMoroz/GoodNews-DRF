@@ -6,41 +6,66 @@
 {% block title %}
 Posts
 {% endblock title %}
- 
+
 <!-- В контенте на странице мы выводим все публикации -->
 {% block content %}
-    <h1>Все публикации  </h1>
-    <h3>{{ time_now|date:'M d Y' }}</h3>
+    <h3>Свежие публикации </h3>
+    <h4> {{ time_now|date:'M d Y' }}</h4>
     <hr>
-    {% if post_list %}
-        <table>
-           <tr>
-               <td>Название</td>
-               <td>Дата публикации</td>
-               <td>Предпросмотр</td>
-           </tr>
-            <!-- Для каждой публикации будет генерироваться новая строчка,
-           т.е. новый HTML код, который указан в теле цикла.
-           При этом сам цикл работает точно так же, как и в Python.
-           post_list — переменная цикла, т.е. наша публикация полученный из списка -->
-           {% for post in post_list %}
-           <tr>
-               <!-- Не забываем, что переменные в шаблоне ничем не отличаются
-                от переменных в Python. Здесь также можно получать доступ к
-                полям объекта модели. Например, здесь мы выводим имя,
-                в следующем столбце дату создания публикации, и т.д.  -->
-               <td> <a href="{% url 'post_detail' post.id %}">{{ post.post_title | censor }}</a> </td>
-               <td>{{ post.creation_date | date:'d.M.Y' }}</td>
-               <!-- Добавим специальный фильтр truncatechars,
-                чтобы ограничить количество символов до 20.
-                Также добавим фильтр "Цензор" для цензурирования непотребных слов.
-                Все остальные символы превратятся в многоточие. -->
-               <td>{{ post.post_text | censor | truncatechars:20 }}</td>
-           </tr>
-           {% endfor %}
+<!-- Перед таблицей добавим форму для поиска -->
+<form method="GET">
+    {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы придётся делать самому -->
+    <input type="submit" value="Найти">
+</form>
 
-       </table>
-   {% else %}
-       <h2>Публикации отсутствуют!</h2>
-   {% endif %}
+<table>
+    <thead>
+        <th>Название</th>
+        <th>Дата публикации</th>
+        <th>Автор</th>
+    </thead>
+    {% for post in filter.qs %} <!-- поменяем post_list на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
+    <tr>
+        <td>
+            <a href="{% url 'post_detail' post.id %}">{{ post.post_title |  title }}</a>
+            <a href="{% url 'post_update' post.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
+            <a href="{% url 'post_delete' post.id %}"><u>Удалить</u></a> <!-- добавим ссылку на удаление товара-->
+        </td>
+        <td>
+            {{ post.creation_date | date:'d.M.Y' }}
+        </td>
+        <td>
+            {{ post.author | title }}
+        </td>
+
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Проверяем, что поддерживается постраничный вывод -->
+{% if is_paginated %}
+
+    <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
+    {% endif %}
+
+    <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a>{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">>>></a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+
+{% endif %}
+
 {% endblock content %}
