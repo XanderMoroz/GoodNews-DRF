@@ -1,0 +1,61 @@
+{% extends "default.html" %}
+{% load cache %}
+
+{% block title %}
+поиск новостей
+{% endblock title %}
+
+
+{% block page_title %}
+<h1>Список новостей</h1>
+<h4>всего новостей: {{page_obj.paginator.count}}</h4>
+<hr>
+{% endblock page_title %}
+
+<!--{% cache 50 content %}-->
+{% block content %}
+
+<form method="GET" >
+    {{ filter.form }} <!-- Форму от фильтров за нас сделает Django. А вот кнопку, увы придётся делать самому -->
+    <input type="submit" value="Найти">
+
+</form>
+<table>
+    <tr>
+        <td><h6>Название</h6></td>
+        <td><h6>Дата Публикации</h6> </td>
+        <td><h6>Пред просмотр</h6></td>
+    </tr>
+    {% for post in object_list%}
+    <tr>
+        <td> {{post.title}} <a href = "{% url 'post_get' post.id %}">ссылка</a>
+            <a href = "{% url 'post_edit' post.id %}"> |редактировать| </a>
+            <a href = "{% url 'post_del' post.id %}"> |удалить| </a>
+        </td>
+        <td>{{post.time_in|date:"d.m.Yг."}}</td>
+        <td>{{post.preview|truncatechars:51}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if page_obj.has_previous %}
+<a href = "?page=1">First</a>
+<a href = "?page={{ page_obj.previous_page_number }}"> << </a>
+{% endif %}
+
+{% for pag in page_obj.paginator.page_range%}
+{% if pag == page_obj.number%}
+<a>{{page_obj.number}}</a>
+{% elif pag > page_obj.number|add:-3 and pag < page_obj.number|add:3 %}
+<a href = "?page={{ pag }}">{{ pag }} </a>
+{% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}">>></a>
+<a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% endif %}
+
+
+{% endblock content %}
+<!--{% endcache %}-->
