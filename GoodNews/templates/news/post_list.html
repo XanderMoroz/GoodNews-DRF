@@ -23,6 +23,7 @@ Posts
         <th>Название</th>
         <th>Дата публикации</th>
         <th>Автор</th>
+        <th>Категория</th>
     </thead>
     {% for post in filter.qs %} <!-- поменяем post_list на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
     <tr>
@@ -31,11 +32,13 @@ Posts
             <a href="{% url 'post_update' post.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
             <a href="{% url 'post_delete' post.id %}"><u>Удалить</u></a> <!-- добавим ссылку на удаление товара-->
         </td>
-        <td>
-            {{ post.creation_date | date:'d.M.Y' }}
-        </td>
-        <td>
-            {{ post.author | title }}
+        <td>{{ post.creation_date | date:'d.M.Y' }}</td>
+
+        <td>{{ post.author | title }}</td>
+
+        <td>{% for category in post.categories.all %}
+            {{ category.category_name }}
+            {% endfor %}
         </td>
 
     </tr>
