@@ -1,6 +1,5 @@
 
 {% extends 'flatpages/default.html' %} <!--  наследуемся от шаблона default.html, который создавали для flatpages -->
-
 {% load custom_filters %} <!-- Загружаем фильтры (чтобы использовать фильтр "ЦЕНЗОР") -->
 
 
@@ -19,6 +18,7 @@ Post Details            <!-- Название у нас будет Post Details 
             </tr>
 
             <tr>
+
                <td>{{ post_detail.post_title | censor }}</td>
                  <!-- Добавим специальный фильтр "Цензор" для цензурирования непотребных слов.
                 Все остальные символы превратятся в многоточие. -->
@@ -27,5 +27,20 @@ Post Details            <!-- Название у нас будет Post Details 
            </tr>
 
     </table>
+
+{% if request.user.is_authenticated %}
+    <p>
+        <h6>Вы можете подписаться на новости одной из этих категорий:</h6>
+        {%for category in post_detail.categories.all%}
+        <br>{{category}}
+        {% if not user in category.subscribers.all %}
+        <button><a href="{% url 'subscribe' category.id %}">Подписаться</a></button>
+        {% else %}
+        <button><a href="{% url 'unsubscribe' category.id %}">Отписаться</a></button>
+        {%endif%}
+        {% endfor %}
+
+    </p>
+{% endif %}
 
 {% endblock content %}
