@@ -1,7 +1,9 @@
 from datetime import datetime
+
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from django.views.generic.edit import CreateView
 from .forms import PostForm
 from .models import Post, Category  # импорт нашей модели
 from .filters import PostFilter  # импорт нашего фильтра
@@ -34,8 +36,8 @@ class PostList(ListView):
         context['time_now'] = datetime.utcnow()
         # вписываем наш фильтр (PostFilter) в контекст
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
-        #context['categories'] = Category.objects.all()
-        #context['form'] = PostForm()
+        # context['categories'] = Category.objects.all()
+        # context['form'] = PostForm()
         return context
 
     def get_queryset(self):
@@ -43,38 +45,16 @@ class PostList(ListView):
         return PostFilter(self.request.GET, queryset=queryset).qs
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)  # создаём новую форму, забиваем в неё данные из POST-запроса
+        form = self.form_class(request.POST)  # создаём новую форму, вносим в неё данные из POST-запроса
 
-        if form.is_valid():  # если пользователь ввёл всё правильно и нигде не ошибся, то сохраняем новый товар
+        if form.is_valid():  # если пользователь ввёл всё правильно и нигде не ошибся, то сохраняем новeую статью
             form.save()
 
         return super().get(request, *args, **kwargs)
 
-# дженерик для создания объекта
-class PostCreateView(CreateView):
-    template_name = 'news/add.html'
-    form_class = PostForm
 
-# дженерик для редактирования объекта
-class PostUpdateView(UpdateView):
-    template_name = 'news/add.html'
-    form_class = PostForm
 
-    #
-    def get_object(self, **kwargs):
-        """
-        метод get_object мы используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся редактировать
-        :param kwargs:
-        :return:
-        """
-        id = self.kwargs.get('pk')
-        return Post.objects.get(pk=id)
 
-# дженерик для удаления товара
-class PostDeleteView(DeleteView):
-    template_name = 'news/delete.html'
-    queryset = Post.objects.all()
-    success_url = '/news/'
 
 class Search(ListView):
     # Указываем модель, объекты которой мы будем выводить
@@ -108,7 +88,6 @@ class Search(ListView):
         return PostFilter(self.request.GET, queryset=queryset).qs
 
 
-
 class PostDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельной публикации
     model = Post
@@ -117,4 +96,35 @@ class PostDetail(DetailView):
     # Название объекта, в котором будет выбранная пользователем публикация
     context_object_name = 'post_detail'
 
-# Create your views here.
+
+# дженерик для создания объекта
+class PostCreateView(CreateView,LoginRequiredMixin, PermissionRequiredMixin):
+    permission_required = ('news.add_post',)
+    template_name = 'news/add.html'
+    form_class = PostForm
+
+
+
+# дженерик для редактирования объекта
+
+class PostUpdateView(UpdateView, LoginRequiredMixin, PermissionRequiredMixin):
+    permission_required = ('news.change_post',)
+    template_name = 'news/add.html'
+    form_class = PostForm
+
+
+    def get_object(self, **kwargs):
+        """
+        метод get_object мы используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся редактировать
+        :param kwargs:
+        :return: объект класса Post
+        """
+        id = self.kwargs.get('pk')
+        return Post.objects.get(pk=id)
+
+
+# дженерик для удаления товара
+class PostDeleteView(DeleteView):
+    template_name = 'news/delete.html'
+    queryset = Post.objects.all()
+    success_url = '/news/'
