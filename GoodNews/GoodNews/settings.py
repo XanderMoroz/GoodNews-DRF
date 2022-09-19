@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,16 +41,18 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     # подключаем джанго фильтры
     'django_filters',
-    #наше приложение
-    'news',
+    # наши приложения
+    'news.apps.NewsConfig',
     'sign',
     'protect',
     # встроенное приложение для аутентификации из модуля django-allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    # ... позволяет аутентифицироваться через Google account:
+    # ... позволяет аутентифицироваться через Google account(d8)
     'allauth.socialaccount.providers.google',
+    # модуль для переодической рассылки (d9.4)
+    'django_apscheduler',
 
 ]
 
@@ -59,7 +60,6 @@ SITE_ID = 1
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -82,10 +82,10 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',  # контекстный процессор для`allauth`
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',  # контекстный процессор для`allauth`
             ],
         },
     },
@@ -131,7 +131,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -165,6 +164,29 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+EMAIL_CONFIRMATION_SIGNUP = True
 
 ACCOUNT_FORMS = {'signup': 'sign.forms.BasicSignupForm'}
+# адрес сервера Яндекс-почты для всех один и тот же
+EMAIL_HOST = 'smtp.yandex.ru'
+# порт smtp сервера тоже одинаковый
+EMAIL_PORT = 465
+# ваше имя пользователя. Если ваша почта user@yandex.ru, то писать user.
+EMAIL_HOST_USER = 'GoodNewsObserver'
+# пароль от почты
+EMAIL_HOST_PASSWORD = '12345qq67890'
+# Яндекс использует ssl, подробнее почитайте. Включать его здесь надо обязательно
+EMAIL_USE_SSL = True
+# здесь указываем уже свою ПОЛНУЮ почту, с которой будут отправляться письма
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + "@yandex.ru"
+
+SERVER_EMAIL = 'GoodNewsObserver@yandex.ru'
+
+# формат даты, которую будет воспринимать наш задачник (вспоминаем модуль по фильтрам)
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+# если задача не выполняется за 25 секунд, то она автоматически снимается, можете поставить время побольше, но как правило, это сильно бьёт по производительности сервера
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds

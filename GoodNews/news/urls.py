@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import PostList, PostDetail, Search, PostCreateView, PostDeleteView, PostUpdateView
+from .views import PostList, PostDetail, Search, PostCreateView, PostDeleteView, PostUpdateView, subscribe, unsubscribe, \
+    CategoriesSubscription
 
 urlpatterns = [
     # path — означает путь.
@@ -31,5 +32,9 @@ urlpatterns = [
     path('search', Search.as_view(), name='search_list'),
     path('add', PostCreateView.as_view(), name='add'),  # Ссылка на создание товара
     path('edit/<int:pk>', PostUpdateView.as_view(), name='post_update'),
-    path('delete/<int:pk>', PostDeleteView.as_view(), name='post_delete')
+    path('delete/<int:pk>', PostDeleteView.as_view(), name='post_delete'),
+
+    path('subscribe/<int:pk>', subscribe, name='subscribe'),
+    path('unsubscribe/<int:pk>', unsubscribe, name='unsubscribe'),
+    path('subscription/', CategoriesSubscription.as_view(), name='subscription')
 ]

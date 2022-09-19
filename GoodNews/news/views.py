@@ -1,12 +1,15 @@
 from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import render
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.views.generic.edit import CreateView
-from .forms import PostForm
-from .models import Post, Category  # импорт нашей модели
+from django.views.generic.edit import CreateView, FormMixin
+from .forms import PostForm, CategoryForm
+from .models import Post, Category, Author  # импорт нашей модели
 from .filters import PostFilter  # импорт нашего фильтра
+from .signals import check_post_limits
 
 
 class PostList(ListView):
@@ -36,7 +39,7 @@ class PostList(ListView):
         context['time_now'] = datetime.utcnow()
         # вписываем наш фильтр (PostFilter) в контекст
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
-        # context['categories'] = Category.objects.all()
+        context['categories'] = Category.objects.all()
         # context['form'] = PostForm()
         return context
 
@@ -51,9 +54,6 @@ class PostList(ListView):
             form.save()
 
         return super().get(request, *args, **kwargs)
-
-
-
 
 
 class Search(ListView):
@@ -96,18 +96,51 @@ class PostDetail(DetailView):
     # Название объекта, в котором будет выбранная пользователем публикация
     context_object_name = 'post_detail'
 
-
-# дженерик для создания объекта
-class PostCreateView(CreateView,LoginRequiredMixin, PermissionRequiredMixin):
+class PostCreateView(CreateView, LoginRequiredMixin, PermissionRequiredMixin):
+    """
+    Класс представления для создания статьи.
+    Наследован от встроенного дженерика, миксина требующего авторизацию и миксина, требующего право доступа
+    """
     permission_required = ('news.add_post',)
     template_name = 'news/add.html'
     form_class = PostForm
 
+    def get_initial(self):
+        initial = super().get_initial()
+        user = self.request.user
+        author = Author.objects.get(user_id=user.pk)
+        initial['author'] = author
+        return initial
 
+    def post(self, request, *args, **kwargs):
+        new_post = Post(
+            post_type=request.POST['post_type'],
+            post_text=request.POST['post_text'],
+            post_title=request.POST['post_title'],
+            author_id=request.POST['author'],
+                        )
+        if check_post_limits(sender=Post, instance=new_post, **kwargs) < 3:
+            new_post.save()
+            new_post.categories.add(request.POST.get('categories'))
 
-# дженерик для редактирования объекта
+        return redirect('news')
+
+    """
+        send_mail(
+            subject=f'"Здравствуйте, {new_post.author.user} Новая статья в твоём любимом разделе!"',
+            # сообщение с кратким описанием проблемы
+            message=new_post.post_text[:50] + "...",
+            # здесь указываете почту, с которой будете отправлять (об этом попозже)
+            from_email='GoodNewsObserver@yandex.ru',
+            recipient_list=['GoodNewsObserver@yandex.ru']) 
+        return redirect('add')
+    """
 
 class PostUpdateView(UpdateView, LoginRequiredMixin, PermissionRequiredMixin):
+    """
+    Класс представления для редактирования статьи.
+    Наследован от встроенного дженерика, миксина требующего авторизацию и миксина, требующего право доступа
+    """
     permission_required = ('news.change_post',)
     template_name = 'news/add.html'
     form_class = PostForm
@@ -115,16 +148,49 @@ class PostUpdateView(UpdateView, LoginRequiredMixin, PermissionRequiredMixin):
 
     def get_object(self, **kwargs):
         """
-        метод get_object мы используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся редактировать
+        метод get_object мы используем вместо queryset, чтобы получить информацию об объекте,
+        который мы собираемся редактировать
         :param kwargs:
         :return: объект класса Post
         """
         id = self.kwargs.get('pk')
         return Post.objects.get(pk=id)
 
-
-# дженерик для удаления товара
 class PostDeleteView(DeleteView):
+    """
+    Класс представления для удаления статьи.
+    Наследован от встроенного дженерика.
+    """
     template_name = 'news/delete.html'
     queryset = Post.objects.all()
     success_url = '/news/'
+
+@login_required
+def subscribe(request, **kwargs):
+    category = Category.objects.get(pk=kwargs['pk'])
+    user = request.user
+    if user not in category.subscribers.all():
+        category.subscribers.add(user)
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required
+def unsubscribe(request, **kwargs):
+    category = Category.objects.get(pk=kwargs['pk'])
+    user = request.user
+    if user in category.subscribers.all():
+        category.subscribers.remove(user)
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class CategoriesSubscription(LoginRequiredMixin, ListView, FormMixin):
+    model = Category
+    template_name = 'news/subscription.html'
+    context_object_name = 'subscription'
+    form_class = CategoryForm
+
+    def get_context_data(self,
+                         **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

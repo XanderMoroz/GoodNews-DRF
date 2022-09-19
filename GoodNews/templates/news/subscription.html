@@ -1,0 +1,36 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% block title %}
+Category subscriptions
+{% endblock title %}
+
+
+{% block content %}
+{% if request.user.is_authenticated %}
+        <table>
+            <tr>
+                <td>
+                    Category
+                </td>
+
+            </tr>
+            {% for category in object_list %} <!-- Для каждого товара будете генерироваться новая строчка, т. е. новый html-код. При этом сам цикл работает точно так же, как и в Python. product — переменная цикла, т. е. наш товар, взятый из общего списка -->
+            <tr>
+<td>
+            {{ category.category_name }}
+            {% if not user in category.subscribers.all %}
+            <a href="{% url 'subscribe' category.id %}"><u>Подписаться</u></a> <!-- добавим ссылку на редактирование товара-->
+            {% elif user in category.subscribers.all %}
+            <a href="{% url 'unsubscribe' category.id  %}"><u> Отписаться </u></a> <!-- добавим ссылку на удаление товара-->
+            {%endif%}
+</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
+{% else %}
+Log in to manage subscription
+
+{% endif %}
+{% endblock content %}
