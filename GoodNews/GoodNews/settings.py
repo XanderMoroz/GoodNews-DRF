@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-q4op)&3#3cbl)=_*0kn_^uh36azuqyy1y@y^p2g#n^br967k1&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -43,10 +43,23 @@ INSTALLED_APPS = [
     # подключаем джанго фильтры
     'django_filters',
     #наше приложение
-    'news'
+    'news',
+    'sign',
+    'protect',
+    # встроенное приложение для аутентификации из модуля django-allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... позволяет аутентифицироваться через Google account:
+    'allauth.socialaccount.providers.google',
+
 ]
 
 SITE_ID = 1
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # подключаем связи для flatpages
-    \
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 ]
 
@@ -66,17 +78,25 @@ ROOT_URLCONF = 'GoodNews.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], #добавили папку для поиска шаблонов
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # добавили папку для поиска шаблонов
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request',  # контекстный процессор для`allauth`
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    # Встроенный бэкенд Django, реализующий аутентификацию по username
+    'django.contrib.auth.backends.ModelBackend',
+
+    # специфичная аутентификация по email или сервис-провайдеру.
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'GoodNews.wsgi.application'
@@ -140,3 +160,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_FORMS = {'signup': 'sign.forms.BasicSignupForm'}
