@@ -4,12 +4,90 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.views.generic.edit import CreateView, FormMixin
 from .forms import PostForm, CategoryForm
 from .models import Post, Category, Author  # импорт нашей модели
 from .filters import PostFilter  # импорт нашего фильтра
 from .signals import check_post_limits
+
+from django.contrib.auth.models import User
+
+
+class MainView(TemplateView):
+    template_name = 'main.html'
+
+    def get_context_data(self, **kwargs):
+        # С помощью super() мы обращаемся к родительским классам
+        # и вызываем у них метод get_context_data с теми же аргументами, что и были переданы нам.
+        # В ответе мы должны получить словарь.
+        context = super().get_context_data(**kwargs)
+        # К словарю добавим пользователя'.
+        user = self.request.user
+        # Добавим в контекст случайную статью
+        main_rand_post = Post.objects.order_by('?').first()
+        context['main_random_post'] = main_rand_post
+        # Добавим в контекст карты пользователя
+        secondary_post1 = Post.objects.order_by('?').first()
+        secondary_post2 = Post.objects.order_by('?').first()
+        context['secondary_post1'] = secondary_post1
+        context['secondary_post2'] = secondary_post2
+        rand_author1 = Author.objects.order_by('?').first()
+        rand_author2 = Author.objects.order_by('?').first()
+        rand_author3 = Author.objects.order_by('?').first()
+        context['rand_author1'] = rand_author1
+        context['rand_author2'] = rand_author2
+        context['rand_author3'] = rand_author3
+        latest_post1 = Post.objects.filter(author=rand_author1).order_by('creation_date').first()
+        latest_post2 = Post.objects.filter(author=rand_author2).order_by('creation_date').first()
+        latest_post3 = Post.objects.filter(author=rand_author3).order_by('creation_date').first()
+        context['latest_post1'] = latest_post1
+        context['latest_post2'] = latest_post2
+        context['latest_post3'] = latest_post3
+
+        return context
+
+
+# class Profile(TemplateView):
+#     """Представление профиля пользователя."""
+#     model = User                                        # Имя модели
+#     template_name = 'profile/profile.html'              # Относительный адрес шаблона
+#     form_class = ProfileForm                            # Имя формы
+
+    # def get_initial(self):
+    #     """Переопределение функции для автозаполнения поля 'user' """
+    #     initial = super().get_initial()
+    #     user = self.request.user
+    #     initial['user'] = user
+    #     return initial
+    #
+    # def get_context_data(self, **kwargs):
+    #     # С помощью super() мы обращаемся к родительским классам
+    #     # и вызываем у них метод get_context_data с теми же аргументами, что и были переданы нам.
+    #     # В ответе мы должны получить словарь.
+    #     context = super().get_context_data(**kwargs)
+    #     # К словарю добавим пользователя'.
+    #     user = self.request.user
+    #     # Добавим в контекст профиль пользователя
+    #     profile = AppUser.objects.get(user=user)
+    #     context['profile'] = profile
+    #     # Добавим в контекст карты пользователя
+    #     myCards = BankCard.objects.filter(owner=profile)
+    #     context['my_cards'] = myCards
+    #     # Добавим в контекст машино-места пользователя
+    #     myParkingPlaces = ParkingPlace.objects.filter(owner=profile)
+    #     context['my_places'] = myParkingPlaces
+    #     # Добавим в контекст брони маниноместа пользователя
+    #     myBooking = Order.objects.filter(arendator=profile, orderState='ON')
+    #     context['my_orders'] = myBooking
+    #     # Добавим в контекст доходы пользователя
+    #     myProfits = Сheque.objects.filter(beneficiary=profile)
+    #     context['my_profits'] = myProfits
+    #     # Добавим в контекст расходы пользователя
+    #     myPayments = Сheque.objects.filter(payer=profile)
+    #     context['my_payments'] = myPayments
+    #
+    #     return context
 
 
 class PostList(ListView):

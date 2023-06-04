@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .views import PostList, PostDetail, Search, PostCreateView, PostDeleteView, PostUpdateView, subscribe, unsubscribe, \
-    CategoriesSubscription
+    CategoriesSubscription, MainView
 
 urlpatterns = [
     # path — означает путь.
@@ -24,7 +24,8 @@ urlpatterns = [
     # Т.к. наше объявленное представление является классом,
     # а Django ожидает функцию, нам надо представить этот класс в виде view.
     # Для этого вызываем метод as_view.
-    path('', PostList.as_view(), name='post_list'),
+    path('', MainView.as_view(), name='main'),
+    path('post_list', PostList.as_view(), name='post_list'),
     # pk — это первичный ключ товара, который будет выводиться у нас в шаблон
     # int — указывает на то, что принимаются только целочисленные значения
     path('<int:pk>', PostDetail.as_view(), name='post_detail'),
@@ -36,5 +37,7 @@ urlpatterns = [
 
     path('subscribe/<int:pk>', subscribe, name='subscribe'),
     path('unsubscribe/<int:pk>', unsubscribe, name='unsubscribe'),
-    path('subscription/', CategoriesSubscription.as_view(), name='subscription')
+    path('subscription/', CategoriesSubscription.as_view(), name='subscription'),
+
+
 ]
