@@ -53,13 +53,17 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     # модуль для переодической рассылки (d9.4)
     'django_apscheduler',
+    'widget_tweaks',
+    'rest_framework',
+    'drf_spectacular',
+    'API'
 
 ]
 
 SITE_ID = 1
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'profile'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -145,20 +149,21 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
+# путь до статики указывается из папки где manage.py как на примере ниже
 STATIC_URL = 'static/'
+
+# строка ниже не влияет на отображение если надо удали
+STATICFILES_DIRS = [
+     BASE_DIR / "static"
+ ]
+
+# STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-"""
-Этот код позволяет использовать шаблон бутстрэп из папки static
-"""
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
@@ -190,3 +195,8 @@ APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 
 # если задача не выполняется за 25 секунд, то она автоматически снимается, можете поставить время побольше, но как правило, это сильно бьёт по производительности сервера
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+REST_FRAMEWORK = {
+    # ВАШИ НАСТРОЙКИ
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
