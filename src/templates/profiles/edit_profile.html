@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+ 
+{% block title %} Change avatar {% endblock title %}
+ 
+{% block content %}
+
+{% load thumbnail %}
+{% load widget_tweaks %}
+
+<main class="container">
+    <div class="p-4 p-md-5 mb-4 rounded border justify-content-center text-center">
+      <h2 class="mb-4">Изменение аватара</h2>
+      <img class="post__avatar align-self-start" style="margin-right: 0.75rem" src="{% thumbnail current_profile.photo 200x200 crop %}" alt="Profile image">
+      <form class="justify-content-center"
+            method="POST" autocomplete="off">
+        {% csrf_token %}
+        {{form}}
+        <div class="profile__form-field mb-4 d-flex flex-column">
+          <button class="btn btn-sm btn-outline-dark" type="submit" value="Upload">Сохранить</button>
+        </div>
+      </form>
+    </div>
+</main>
+{% endblock content %}

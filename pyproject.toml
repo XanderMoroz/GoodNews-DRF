@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "goodnews-drf"
+version = "0.1.0"
+description = ""
+authors = ["xander <moroz070688@gmail.com>"]
+readme = "README.md"
+packages = [{include = "goodnews_drf"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.6"
+django-filter = "^23.3"
+django-widget-tweaks = "^1.5.0"
+psycopg2-binary = "^2.9.9"
+python-dotenv = "^1.0.0"
+pillow = "^10.1.0"
+easy-thumbnails = "^2.8.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

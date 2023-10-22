@@ -1,0 +1,44 @@
+version: '3'
+services:
+
+  web:
+    build:
+      context: .
+      args:
+        REQUIREMENTS_FILE: reqs.txt
+    restart: always
+    env_file: .env
+    command: bash -c "python manage.py migrate && python manage.py loaddata initial.json && python manage.py createsuperuser && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./:/app
+    ports:
+      - 8000:8000
+    networks:
+        - goodnews-network
+
+  postgres:
+    image: postgres:15-alpine
+    # Проверка состояния бд.
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=goodnews
+#      - POSTGRES_EXTENSIONS=pg_trgm
+    # Внутри контейнера монтируем том "postgres-data".
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    # Подключаемся к общей сети
+    networks:
+      - goodnews-network
+
+volumes:
+
+  postgres-data:
+
+networks:
+  goodnews-network:

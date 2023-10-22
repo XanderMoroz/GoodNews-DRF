@@ -1,0 +1,144 @@
+{% extends 'base/base.html' %}
+
+{% block title %} Личный кабинет {% endblock %}
+
+{% block content %}
+
+{% load static %}
+{% load thumbnail %}
+
+<main class="container">
+
+  {% if list_of_categories %}
+  <div class="nav-scroller py-1 mb-2">
+    <nav class="nav d-flex justify-content-between">
+
+      {% for category in list_of_categories %}
+      <a class="p-2 link-secondary" href="{% url 'posts_of_categories' category.id %}">
+        {{category.category_name}}
+      </a>
+      {% endfor %}
+    </nav>
+  </div>
+  {% endif %}
+
+  <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-200 position-relative">
+
+      <div class="col-auto d-none d-lg-block">
+
+        <img src="{% thumbnail profile.photo 200x200 crop %}" alt="" />
+      </div>
+
+    <div class="col p-4 d-flex flex-column position-static">
+        <div style="display: flex; justify-content: space-between;">
+            <strong class="d-inline-block mb-2 text-primary">Мой профиль</strong>
+            <a class=stretched-link" href="{% url 'edit_profile' profile.id %}" aria-label="Edit profile">
+              <img src="{% static 'images/icons/pen-to-square-solid.svg' %}"
+                   alt="Delete" width="20" height="20" class="mx-3">
+            </a>
+        </div>
+
+
+          <h3 class="mb-0">{{profile.user.username}}</h3>
+          <div class="mb-1 text-body-secondary">Зарегистрирован с {{profile.user.date_joined}}</div>
+          <p class="card-text mb-auto">Рейтинг на сайте: {{profile.author_rating}}</p>
+
+<!--         <a href="#"> &lt;!&ndash; class="stretched-link">&ndash;&gt;-->
+<!--            <button class="btn btn-sm btn-block btn-outline-dark">-->
+<!--              Редактировать профиль-->
+<!--            </button>-->
+<!--          </a>-->
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+
+  <div class="row g-5">
+    <div class="col-md-8">
+      <div class="border-bottom mb-4" style="display: flex; justify-content: space-between;">
+        <h3 class=" fst-italic">
+          Мои публикации
+        </h3>
+        <a class="link-secondary border-bottom" href="{% url 'post_create' %}" aria-label="Profile">
+          <img src="{% static 'images/icons/plus-solid.svg' %}"
+               alt="Create" width="20" height="20" class="mx-3">
+        </a>
+      </div>
+
+
+      {% for post in author_posts %}
+
+      <article class="blog-post">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-auto position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <h3 class="mb-0">{{post.title}}</h3>
+          <div class="mb-1 text-body-secondary">{{post.creation_date}}</div>
+          <p class="card-text mb-auto">{{post.text | truncatewords:5}}</p>
+          <a href="{% url 'post_update' post.id %}" class="stretched-link">
+            Редактировать
+          </a>
+        </div>
+<!--        <div class="col-auto d-none d-lg-block">-->
+<!--          <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
+<!--        </div>-->
+      </article>
+
+      {% endfor %}
+
+
+      <nav class="blog-pagination" aria-label="Pagination">
+        <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
+        <a class="btn btn-outline-secondary rounded-pill disabled">Newer</a>
+      </nav>
+
+    </div>
+
+    <div class="col-md-4">
+      <div class="position-sticky" style="top: 2rem;">
+        <div class="p-4 mb-3 bg-body-tertiary rounded">
+          <h4 class="fst-italic">About</h4>
+          <p class="mb-0">Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.</p>
+        </div>
+
+        <div class="p-4" >
+          <h4 class="fst-italic">My subscribtions</h4>
+          {% if category_subscribed %}
+          {% for category in category_subscribed %}
+          <div style="display: flex; justify-content: space-between;">
+            <a href="{% url 'posts_of_categories' category.id %}">
+              <p>{{category.title}}</p>
+            </a>
+            <a class="link-secondary" href="{% url 'unsubscribe' category.id %}" aria-label="Profile">
+              <img src="{% static 'images/icons/delete-left-solid.svg' %}"
+                   alt="Delete" width="24" height="24" class="mx-3">
+            </a>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p>You haven't subsciption yet...</p>
+          {% endif %}
+
+
+        </div>
+
+        <div class="p-4">
+          <h4 class="fst-italic">Elsewhere</h4>
+          <ol class="list-unstyled">
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Facebook</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+{% endblock content %}

@@ -1,0 +1,471 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "john",
+      "password": "password",
+      "email": "john@example.com"
+    }
+  },
+  {
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "username": "emma",
+    "password": "password",
+    "email": "emma@example.com"
+    }
+  },
+  {
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "username": "alex",
+    "password": "password",
+    "email": "alex@example.com"
+    }
+  },
+  {
+    "model": "blogs.author",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "photo": "images/avatars/john.png",
+      "author_rating": 0
+    }
+  },
+  {
+    "model": "blogs.author",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "photo": "images/avatars/emma.png",
+      "author_rating": 0
+    }
+  },
+  {
+    "model": "blogs.author",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "photo": "images/avatars/alex.png",
+      "author_rating": 0
+    }
+  },
+
+  {
+    "model": "blogs.category",
+    "pk": 1,
+    "fields": {
+      "title": "World",
+      "image": "images/categories/World.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 2,
+    "fields": {
+      "title": "Technology",
+      "image": "images/categories/Technology.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 3,
+    "fields": {
+      "title": "Design",
+      "image": "images/categories/Design.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 4,
+    "fields": {
+      "title": "Culture",
+      "image": "images/categories/Culture.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 5,
+    "fields": {
+      "title": "Business",
+      "image": "images/categories/Business.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 6,
+    "fields": {
+      "title": "Politics",
+      "image": "images/categories/Politics.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 7,
+    "fields": {
+      "title": "Science",
+      "image": "images/categories/Science.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 8,
+    "fields": {
+      "title": "Health",
+      "image": "images/categories/Health.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 9,
+    "fields": {
+      "title": "Style",
+      "image": "images/categories/Style.jpg"
+    }
+  },
+  {
+    "model": "blogs.category",
+    "pk": 10,
+    "fields": {
+      "title": "Travel",
+      "image": "images/categories/Travel.jpg"
+    }
+  },
+
+
+
+  {
+    "model": "blogs.post",
+    "pk": 1,
+    "fields": {
+      "author": 1,
+      "type": "ART",
+      "title": "Article about World",
+      "text": "В мире происходят множество событий, которые заслуживают нашего внимания. Новости со всего мира приносят нам информацию о политических событиях, экономических трендах, научных открытиях и многом другом. Мы узнаем о глобальных проблемах, решениях, вызовах и достижениях. Благодаря новостям мы остаемся в курсе происходящего и можем принимать осознанные решения. Оставайтесь вместе с нами, чтобы быть в курсе последних новостей в мире.",
+      "post_rating": 0,
+      "creation_date": "2022-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "blogs.post",
+    "pk": 2,
+    "fields": {
+      "author": 1,
+      "type": "ART",
+      "title": "News in the Technology",
+      "text": "Технологические новости всегда привлекают наше внимание. Быстрые темпы развития технологий, постоянные инновации и новые открытия делают эту область увлекательной и захватывающей. Мы следим за последними новостями в мире технологий, чтобы быть в курсе новых гаджетов, интеллектуальных устройств, разработок в сфере искусственного интеллекта и многое другое. Оставайтесь с нами, чтобы узнать о последних достижениях и тенденциях в мире технологий.",
+      "post_rating": 0,
+      "creation_date": "2022-02-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "blogs.post",
+    "pk": 3,
+    "fields": {
+      "author": 1,
+      "type": "ART",
+      "title": "Article about Design",
+      "text": "Design is an integral part of our everyday lives. It shapes the products we use, the spaces we inhabit, and the experiences we have. From graphic design to industrial design, the world of design is diverse and constantly evolving. In this article, we explore the importance of design, its impact on our lives, and the creative process behind it. Join us as we delve into the fascinating world of design and discover its power to inspire and transform.",
+      "post_rating": 0,
+      "creation_date": "2022-03-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "blogs.post",
+    "pk": 4,
+    "fields": {
+      "author": 2,
+      "type": "ART",
+      "title": "Article about Culture",
+      "text": "Культура - это то, что определяет нас как общество и формирует нашу идентичность. Она включает в себя искусство, музыку, литературу, традиции и обычаи, которые передаются из поколения в поколение. В этой статье мы исследуем различные аспекты культуры, ее влияние на наш образ жизни и взаимодействие с другими культурами. Откройте для себя разнообразие культурного наследия и его значение в нашем мире.",
+      "post_rating": 0,
+      "creation_date": "2022-04-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "blogs.post",
+    "pk": 5,
+    "fields": {
+      "author": 2,
+      "type": "ART",
+      "title": "Article about Business",
+      "text": "Бизнес - это двигатель экономики и источник инноваций. В этой статье мы рассмотрим различные аспекты бизнеса, включая предпринимательство, управление, маркетинг и финансы. Узнайте о стратегиях успеха, вызовах, с которыми сталкиваются предприниматели, и роли бизнеса в современном мире. Мы исследуем ключевые тенденции и примеры успешных предприятий, чтобы вдохновить вас на достижение ваших бизнес-целей.",
+      "post_rating": 0,
+      "creation_date": "2022-05-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "blogs.post",
+    "pk": 6,
+    "fields": {
+      "author": 2,
+      "type": "ART",
+      "title": "Article about Politics",
+      "text": "Политика - это сфера, которая определяет правила и руководит обществом. В этой статье мы рассмотрим различные аспекты политики, включая государственное управление, политические системы, выборы и международные отношения. Узнайте о важных политических событиях, ключевых игроках и влиянии политики на нашу жизнь. Мы исследуем различные точки зрения и предоставим вам информацию для осознанного участия в политической дискуссии.",
+      "post_rating": 0,
+      "creation_date": "2022-06-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "blogs.post",
+    "pk": 7,
+    "fields": {
+      "author": 3,
+      "type": "ART",
+      "title": "Article about Science",
+      "text": "Наука - это ключевой двигатель прогресса и понимания мира вокруг нас. В этой статье мы рассмотрим различные аспекты науки, включая фундаментальные исследования, прикладные науки и технологии. Узнайте о последних открытиях, научных теориях и их влиянии на нашу жизнь. Мы исследуем различные области науки, включая физику, химию, биологию и многое другое. Откройте для себя увлекательный мир науки и его вклад в развитие человечества.",
+      "post_rating": 0,
+      "creation_date": "2022-07-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "blogs.post",
+    "pk": 8,
+    "fields": {
+      "author": 3,
+      "type": "ART",
+      "title": "Article about Style",
+      "text": "Стиль - это способ самовыражения и выражения своей индивидуальности через одежду, прическу, макияж и другие элементы внешнего вида. В этой статье мы рассмотрим различные аспекты стиля, включая модные тенденции, историю моды, стилизацию и аксессуары. Узнайте о различных стилях, как они отражают культуру и личность, и как использовать стиль для выражения себя. Откройте для себя уникальный мир стиля и вдохновитесь для создания своего неповторимого образа.",
+      "post_rating": 0,
+      "creation_date": "2022-09-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "blogs.post",
+    "pk": 9,
+    "fields": {
+      "author": 3,
+      "type": "ART",
+      "title": "Article about Travel",
+      "text": "Путешествия - это удивительный способ познать мир и открыть новые горизонты. В этой статье мы рассмотрим различные аспекты путешествий, включая популярные направления, культурные особенности, приключения и советы для путешественников. Узнайте о захватывающих местах, историях путешествий и впечатлениях от разных стран и континентов. Погрузитесь в мир приключений и откройте новые горизонты в своих путешествиях.",
+      "post_rating": 0,
+      "creation_date": "2022-10-01T00:00:00Z"
+    }
+  },
+
+
+  {
+    "model": "blogs.postcategory",
+    "pk": 1,
+    "fields": {
+      "post": 1,
+      "category": 1
+    }
+  },
+  {
+    "model": "blogs.postcategory",
+    "pk": 2,
+    "fields": {
+      "post": 2,
+      "category": 2
+    }
+  },
+  {
+    "model": "blogs.postcategory",
+    "pk": 3,
+    "fields": {
+      "post": 3,
+      "category": 3
+    }
+  },
+  {
+    "model": "blogs.postcategory",
+    "pk": 4,
+    "fields": {
+      "post": 4,
+      "category": 4
+    }
+  },
+  {
+    "model": "blogs.postcategory",
+    "pk": 5,
+    "fields": {
+      "post": 5,
+      "category": 5
+    }
+  },
+  {
+    "model": "blogs.postcategory",
+    "pk": 6,
+    "fields": {
+      "post": 6,
+      "category": 6
+    }
+  },
+  {
+    "model": "blogs.postcategory",
+    "pk": 7,
+    "fields": {
+      "post": 7,
+      "category": 7
+    }
+  },
+  {
+    "model": "blogs.postcategory",
+    "pk": 8,
+    "fields": {
+      "post": 8,
+      "category": 8
+    }
+  },
+  {
+    "model": "blogs.postcategory",
+    "pk": 9,
+    "fields": {
+      "post": 9,
+      "category": 9
+    }
+  },
+
+  {
+    "model": "blogs.usercategory",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "category": 1
+    }
+  },
+  {
+    "model": "blogs.usercategory",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "category": 2
+    }
+  },
+  {
+    "model": "blogs.usercategory",
+    "pk": 3,
+    "fields": {
+      "user": 1,
+      "category": 3
+    }
+  },
+  {
+    "model": "blogs.usercategory",
+    "pk": 4,
+    "fields": {
+      "user": 2,
+      "category": 4
+    }
+  },
+  {
+    "model": "blogs.usercategory",
+    "pk": 5,
+    "fields": {
+      "user": 2,
+      "category": 5
+    }
+  },
+  {
+    "model": "blogs.usercategory",
+    "pk": 6,
+    "fields": {
+      "user": 2,
+      "category": 6
+    }
+  },
+
+  {
+    "model": "blogs.comment",
+    "pk": 1,
+    "fields": {
+      "post": 1,
+      "user": 1,
+      "creation_date": "2023-01-01T00:00:00Z",
+      "text": "This is a comment about the post",
+      "comment_rating": 0
+    }
+  },
+  {
+    "model": "blogs.comment",
+    "pk": 2,
+    "fields": {
+      "post": 2,
+      "user": 1,
+      "creation_date": "2023-01-02T00:00:00Z",
+      "text": "Another comment on a different post",
+      "comment_rating": 0
+    }
+  },
+  {
+    "model": "blogs.comment",
+    "pk": 3,
+    "fields": {
+      "post": 3,
+      "user": 1,
+      "creation_date": "2023-01-02T00:00:00Z",
+      "text": "Another comment on a different post",
+      "comment_rating": 0
+    }
+  },
+  {
+    "model": "blogs.comment",
+    "pk": 4,
+    "fields": {
+      "post": 4,
+      "user": 2,
+      "creation_date": "2023-01-02T00:00:00Z",
+      "text": "Another comment on a different post",
+      "comment_rating": 0
+    }
+  },
+  {
+    "model": "blogs.comment",
+    "pk": 5,
+    "fields": {
+      "post": 5,
+      "user": 2,
+      "creation_date": "2023-01-02T00:00:00Z",
+      "text": "Another comment on a different post",
+      "comment_rating": 0
+    }
+  },
+  {
+    "model": "blogs.comment",
+    "pk": 6,
+    "fields": {
+      "post": 6,
+      "user": 2,
+      "creation_date": "2023-01-02T00:00:00Z",
+      "text": "Another comment on a different post",
+      "comment_rating": 0
+    }
+  },
+  {
+    "model": "blogs.comment",
+    "pk": 7,
+    "fields": {
+      "post": 7,
+      "user": 3,
+      "creation_date": "2023-01-02T00:00:00Z",
+      "text": "Another comment on a different post",
+      "comment_rating": 0
+    }
+  },
+  {
+    "model": "blogs.comment",
+    "pk": 8,
+    "fields": {
+      "post": 8,
+      "user": 3,
+      "creation_date": "2023-01-02T00:00:00Z",
+      "text": "Another comment on a different post",
+      "comment_rating": 0
+    }
+  },
+  {
+    "model": "blogs.comment",
+    "pk": 9,
+    "fields": {
+      "post": 9,
+      "user": 3,
+      "creation_date": "2023-01-02T00:00:00Z",
+      "text": "Another comment on a different post",
+      "comment_rating": 0
+    }
+  }
+]

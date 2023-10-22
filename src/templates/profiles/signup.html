@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+
+<head>
+       {% load static %}
+
+       <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <meta name="description" content="">
+       <title>Login Page</title>
+
+       <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/">
+       <link rel="stylesheet" type="text/css" href="{% static 'assets/dist/css/bootstrap.min.css' %}">
+
+       <style>
+              .container {
+                     position: fixed;
+                     top: 50%;
+                     left: 50%;
+                     transform: translate(-50%, -50%);
+                     width: auto;
+                     height: auto;
+              }
+       </style>
+
+       <!-- Custom styles for this template -->
+       <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap"
+              rel="stylesheet">
+       <!-- Custom styles for Index -->
+       <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
+       <!-- Custom styles for Registration -->
+       <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/sign-in.css' %}">-->
+</head>
+
+<body>
+   <div class="container p-4 rounded border mb-4">
+     <div class="row mb-2 form-group">
+
+       <div class="text-center">
+         <h3 class="display-15 pb-4 mb-4 fst-italic border-bottom">
+           <a class="blog-header-logo text-body-emphasis mb-4" href="{% url 'main' %}">
+             GN
+           </a>
+         </h3>
+       </div>
+
+
+       <form method="POST" class="" style="width: 100%">
+         {% csrf_token %}
+
+           <!-- username field start  -->
+         <div class="post__form-field mb-4" style="display: flex; flex-direction: column;">
+           <label class="post__form-label fst-italic" style="margin-bottom: 5px;">
+             Имя пользователя:
+           </label>
+           <input type="text" name="username" maxlength="150" autocapitalize="none"
+                  autocomplete="id_username" autofocus required
+                  id="username">
+         </div>
+         <!-- username field stop  -->
+
+         <!-- password field start  -->
+         <div class="post__form-field mb-4" style="display: flex; flex-direction: column;">
+           <label class="post__form-label fst-italic" style="margin-bottom: 5px;"
+                  for="id_password1">
+             Пароль:
+           </label>
+           <input type="password" name="password1"
+                  autocomplete="new-password" required
+                  id="password1">
+         </div>
+         <!-- password field stop  -->
+
+         <!-- password2 field start  -->
+         <div class="post__form-field mb-4" style="display: flex; flex-direction: column;">
+           <label class="post__form-label fst-italic" style="margin-bottom: 5px;">
+             Подтверждение пароля:
+           </label>
+           <input type="password" name="password2"
+                  autocomplete="new-password" required
+                  id="password2">
+         </div>
+         <!-- password2 field stop  -->
+
+         <!-- Теперь нам нужна только готовая форма и кнопка -->
+         <div class="post__form-field" style="display: flex; flex-direction: column;">
+           <button class="btn btn-sm btn-block btn-outline-dark" type="submit">
+             Зарегистрироваться
+           </button>
+         </div>
+
+         {% if error %}
+         <p>{{ error }}</p>
+         {% endif %}
+
+       </form>
+
+       <div class="text-center">
+         <p>
+           Already have an account?
+           <a href="{% url 'login' %}">
+             Log in
+           </a>
+         </p>
+       </div>
+
+     </div>
+   </div>
+</body>

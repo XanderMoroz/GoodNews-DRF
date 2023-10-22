@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ subject }}</title>
+</head>
+<body>
+<main class="main">
+  <div class="wrapper"
+       style="flex-direction: column; align-items: center; justify-content: flex-start; gap: 32px;">
+      <h1 class="delete-card__title">Дорогой {{ new_post.author.user }}</h1>
+      <h5 style="word-break: break-word; text-align: center;"
+          class="delete-card__subtitle">
+          Новый пост в категории
+          {% for cat in new_post.categories.all %}
+          {{ cat.category_name }}
+          {% endfor %}
+          на портале GoodNews:
+      </h5>
+
+      <a href= "http://127.0.0.1:8000/{{ my_post.id }}">
+          {{new_post.post_title}}
+      </a>
+      <p>
+          {{new_post.post_text|truncatechars:100}}
+      </p>
+      <a href= "http://127.0.0.1:8000/news/{{ new_post.id }}">
+          Продолжить чтение
+      </a>
+  </div>
+</main>
+
+</body>
+
+</html>

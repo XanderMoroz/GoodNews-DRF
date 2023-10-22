@@ -1,0 +1,85 @@
+{% extends 'base/base.html' %}
+{% load custom_filters %}
+{% block title %}
+Category subscriptions
+{% endblock title %}
+
+
+{% block content %}
+
+{% load static %}
+
+<main class="container">
+  {% if list_of_categories %}
+  <div class="nav-scroller py-1 mb-2">
+    <nav class="nav d-flex justify-content-between">
+
+      {% for category in list_of_categories %}
+      <a class="p-2 link-secondary"
+         href="{% url 'posts_of_categories' category.id %}">
+        {{category.title}}
+      </a>
+      {% endfor %}
+    </nav>
+  </div>
+  {% endif %}
+
+
+    <div class="row mb-2">
+      {% if request.user.is_authenticated %}
+        {% for category in object_list %}
+
+    <div class="col-md-6">
+
+
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-200 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">{{ category.title }}</strong>
+          <h3 class="mb-0"></h3>
+          {% for cat, num in post_dict.items %}
+          {% if cat == category.title %}
+          <div class="mb-1 text-body-secondary">{{ num }} articles available</div>
+          {% endif %}
+          {% endfor %}
+          <p class="card-text mb-auto">{{category.subscribers.count }} subscribers</p>
+          <p class="card-text mb-auto">{{category.subscribers.count }} subscribers</p>
+
+
+          {% if not user in category.subscribers.all %}
+            <a href="{% url 'subscribe' category.id %}" class="stretched-link">
+                Subscribe
+            </a>
+            {% elif user in category.subscribers.all %}
+            <a href="{% url 'unsubscribe' category.id %}" class="stretched-link">
+                Unsubscribe
+            </a>
+            {%endif%}
+
+        </div>
+
+        <div class="col-auto d-none d-lg-block">
+          <img class="bd-placeholder-img" width="200" height="200"
+               src="{{ category.image.url }}">
+        </div>
+
+      </div>
+    </div>
+      {% endfor %}
+        {% else %}
+Log in to manage subscription
+
+{% endif %}
+
+  </div>
+
+
+
+
+
+
+</main>
+
+
+
+
+{% endblock content %}

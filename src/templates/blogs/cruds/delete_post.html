@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+ 
+{% block title %} Delete Post {% endblock title %}
+ 
+{% block content %}
+
+<main class="container">
+    <div class="p-4 p-md-5 mb-4 rounded border">
+        <h2 class="mb-4" style="text-align: center;">Удаление публикации</h2>
+        <div class="deletion_block row g-0 flex-md-row mb-4 shadow-sm h-md-200 position-relative">
+            <div class="block_title col-md-6">
+                <label>Название статьи</label>
+                <p>{{ post.title | title }}</p>
+            </div>
+
+
+            <div class="block_title col-md-6">
+                <label>Дата публикации</label>
+                <p>{{ post.creation_date | date:'d.M.Y' }}</p>
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="post__form-field" style="display: flex; flex-direction: column;">
+                <button class="btn btn-sm btn-block btn-outline-dark" type="submit">
+                    Удалить
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+</main>
+{% endblock content %} 

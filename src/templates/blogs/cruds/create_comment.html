@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+
+               <div class="create_comment_section"
+                    style="display: flex;">
+                   <img class="align-self-start"
+                                style="margin-right: 0.75rem"
+                                src="{% thumbnail current_author.photo 50x50 crop %}"
+                                alt="Author avatar">
+
+                   <form method="POST" style="width: 100%;">
+                       {% csrf_token %}
+
+                       {{ form.non_field_errors }}
+                       {{ form.source.errors }}
+                       {{ form.source }}
+
+                       {{ form.media.errors }}
+                       {{ form.media }}
+
+                       <!-- ПОЛЕ С ТЕКСТОМ КОММЕНТАРИЯ НАЧАЛО  -->
+                       <div class="post__form-field mb-4"
+                            style="display: flex; flex-direction: column;">
+                           <label class="post__form-label fst-italic" style="margin-bottom: 5px;">
+                               <h5>Add your comment</h5>
+                           </label>
+                           {% render_field form.text type="textarea" id='text' placeholder="Write your comment here..."%}
+                           {{ form.text.errors }}
+                       </div>
+                       <!-- ПОЛЕ С ТЕКСТОМ КОММЕНТАРИЯ КОНЕЦ  -->
+
+                       {% for hidden_field in form.hidden_fields %}
+                       {% if hidden_field.errors %}
+                       <ul>
+                           {% for error in hidden_field.errors %}
+                           <li>(hidden field {{ hidden_field.name }})</li>
+                           {% endfor %}
+                       </ul>
+                       {% endif %}
+                       {{hidden_field}}
+                       {% endfor %}
+
+                       <!-- Теперь нам нужна только готовая форма и кнопка -->
+                       <div class="post__form-field mb-4" style="display: flex; flex-direction: column;">
+                           <button class="btn btn-sm btn-block btn-outline-dark" type="submit">
+                               Сохранить
+                           </button>
+                       </div>
+                   </form>
+               </div>
+               {% endif %}
+</body>
+</html>

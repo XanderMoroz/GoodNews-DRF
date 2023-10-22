@@ -1,0 +1,200 @@
+{% extends "base/base.html" %}
+{% load cache %}
+
+{% block title %}
+поиск новостей
+{% endblock title %}
+
+
+{% block page_title %}
+<h1>Список новостей</h1>
+<h4>всего новостей: {{page_obj.paginator.count}}</h4>
+<hr>
+{% endblock page_title %}
+
+{% load widget_tweaks %}
+{% load thumbnail %}
+<!--{% cache 50 content %}-->
+{% block content %}
+
+<main class="container">
+
+  <div class="p-4 p-md-5 mb-4 rounded border">
+
+      <div class="search_section">
+          <form style="width: 100%">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            {{ form.source.errors }}
+            {{ form.source }}
+
+            {{ form.media.errors }}
+            {{ form.media }}
+
+            <label class="catalog__label">
+              Поиск
+            </label>
+            <div class="catalog__search-block-actions">
+              <input placeholder="Введите название или текст публикации..."
+                         class="catalog__search-block-input"
+                         type="text"
+                         name="query">
+              <button class="btn btn-sm btn-block btn-outline-dark" type="submit">
+                Искать
+              </button>
+            </div>
+
+
+            {% for hidden_field in form.hidden_fields %}
+            {% if hidden_field.errors %}
+
+            <ul>
+              {% for error in hidden_field.errors %}
+              <li>(hidden field {{ hidden_field.name }})</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            {{hidden_field}}
+            {% endfor %}
+          </form>
+      </div>
+
+
+<!--    <div class="col-md-6 px-0">-->
+<!--      <h1 class="display-4 fst-italic">ds</h1>-->
+<!--      <p class="lead my-3">{{ main_post.text | truncatewords:20 }}</p>-->
+<!--      <p class="lead mb-0">-->
+<!--        <a href="#"-->
+<!--           class="text-white fw-bold">-->
+<!--          Continue reading...-->
+<!--        </a>-->
+<!--      </p>-->
+<!--    </div>-->
+  </div>
+
+  {% if secondary_post1 %}
+  <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">
+            {% for post in post_cat1 %}
+            {{post.category}}
+            {% endfor %}
+          </strong>
+          <h3 class="mb-0">{{secondary_post1.title}}</h3>
+          <div class="mb-1 text-body-secondary">{{secondary_post1.creation_date}}</div>
+          <p class="card-text mb-auto">{{secondary_post1.text | truncatewords:15 }}</p>
+          <a href="{% url 'post_detail' secondary_post1.id %}" class="stretched-link">Continue reading</a>
+        </div>
+
+      </div>
+    </div>
+    {% endif %}
+
+    {% if secondary_post2 %}
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success">
+            {% for post in post_cat2 %}
+            {{post.category}}
+            {% endfor %}
+          </strong>
+          <h3 class="mb-0">{{secondary_post2.title}}</h3>
+          <div class="mb-1 text-body-secondary">{{secondary_post2.creation_date}}</div>
+          <p class="mb-auto">{{secondary_post2.text | truncatewords:15}}</p>
+          <a href="{% url 'post_detail' secondary_post2.id %}"
+             class="stretched-link">
+            Continue reading
+          </a>
+        </div>
+<!--        <div class="col-auto d-none d-lg-block">-->
+<!--          <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
+<!--        </div>-->
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <div class="row g-5">
+    <div class="col-md-8">
+      <h3 class="pb-4 mb-4 fst-italic border-bottom">
+        Search Results
+      </h3>
+
+      {% if search_res %} <!-- ЕСЛИ ПОИСКОВОЙ ЗАПРОС СУЩЕСТВУЕТ -->
+
+      {% for post in search_res %}
+      <article class="blog-post">
+        <h2 class="blog-post-title mb-1">{{post.title | truncatewords:20}}</h2>
+        <div class="post__header mb-3"
+             style="display: flex; justify-content: space-between;">
+
+            <img class="post__avatar align-self-start"
+                                style="align-self: start; margin-right: 0.75rem"
+                                src="{% thumbnail post.author.photo 50x50 crop %}"
+                                alt="Avatar">
+            <time class="creation-date fst-italic">{{ post.creation_date | date:'d.M.Y' }}</time>
+        </div>
+
+        <p>{{post.text | truncatewords:25 }}</p>
+        <a href="{% url 'post_detail' post.id %}"
+           class="stretched-link">
+          Continue reading
+        </a>
+      </article>
+      {% endfor %}
+      {% endif %}
+
+
+      <nav class="blog-pagination" aria-label="Pagination">
+        <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
+        <a class="btn btn-outline-secondary rounded-pill disabled">Newer</a>
+      </nav>
+
+    </div>
+
+    <div class="col-md-4">
+      <div class="position-sticky" style="top: 2rem;">
+        <div class="p-4 mb-3 bg-body-tertiary rounded">
+          <h4 class="fst-italic">About</h4>
+          <p class="mb-0">Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.</p>
+        </div>
+
+        <div class="p-4">
+          <h4 class="fst-italic">Archives</h4>
+          <ol class="list-unstyled mb-0">
+            <li><a href="#">March 2021</a></li>
+            <li><a href="#">February 2021</a></li>
+            <li><a href="#">January 2021</a></li>
+            <li><a href="#">December 2020</a></li>
+            <li><a href="#">November 2020</a></li>
+            <li><a href="#">October 2020</a></li>
+            <li><a href="#">September 2020</a></li>
+            <li><a href="#">August 2020</a></li>
+            <li><a href="#">July 2020</a></li>
+            <li><a href="#">June 2020</a></li>
+            <li><a href="#">May 2020</a></li>
+            <li><a href="#">April 2020</a></li>
+          </ol>
+        </div>
+
+        <div class="p-4">
+          <h4 class="fst-italic">Elsewhere</h4>
+          <ol class="list-unstyled">
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Facebook</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock content %}
+<!--{% endcache %}-->

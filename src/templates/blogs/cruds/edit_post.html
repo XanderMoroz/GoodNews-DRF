@@ -1,0 +1,122 @@
+{% extends 'base/base.html' %}
+
+{% block title %} Edit Post {% endblock title %}
+
+{% block content %}
+
+{% load static %}
+
+
+{% if 'news.add_post' in perms %} <!-- проверка разрешений -->
+
+<main class="container">
+  <div class="row mb-2 form-group">
+    <h3 class="display-15 pb-4 mb-4 fst-italic border-bottom">
+      Редактирование публикации
+    </h3>
+
+    {% load widget_tweaks %}
+
+    <form style="width: 100%" method="POST" autocomplete="off">
+      {% csrf_token %}
+
+      {{ form.non_field_errors }}
+
+      {{ form.source.errors }}
+      {{ form.source }}
+
+      {{ form.media.errors }}
+      {{ form.media }}
+
+      <!-- ПОЛЕ С НАЗВАНИЕМ СТАТЬИ НАЧАЛО  -->
+      <div class="post__form-field mb-4" style="display: flex; flex-direction: column;">
+        <label class="post__form-label fst-italic" style="margin-bottom: 5px;">
+          <h5>Название</h5>
+        </label>
+        {% render_field form.title type="text" id='title' placeholder="Title"%}
+        {{ form.title.errors }}
+      </div>
+      <!-- ПОЛЕ С НАЗВАНИЕМ СТАТЬИ КОНЕЦ  -->
+
+      <!-- ПОЛЕ С СОДЕРЖАНИЕМ СТАТЬИ НАЧАЛО  -->
+      <div class="post__form-field mb-4" style="display: flex; flex-direction: column;">
+        <label class="post__form-label fst-italic" style="margin-bottom: 5px;">
+          <h5>Содержание</h5>
+        </label>
+        {% render_field form.text type="textarea" id='text' placeholder="Text"%}
+        {{ form.text.errors }}
+      </div>
+      <!-- ПОЛЕ С СОДЕРЖАНИЕМ СТАТЬИ КОНЕЦ  -->
+
+      <div class="row mb-4" style="margin-bottom: 5px;">
+
+        <!-- ПОЛЕ С КАТЕГОРИЕЙ СТАТЬИ НАЧАЛО  -->
+        <div class="post__form-field col-md-6" style="display: flex; flex-direction: column;">
+          <label class="post__form-label fst-italic" style="margin-bottom: 5px;">
+            <h5>Категории</h5>
+          </label>
+          {% render_field form.categories type="select" id='categories' %}
+          {{ form.categories.errors }}
+        </div>
+        <!-- ПОЛЕ С КАТЕГОРИЕЙ СТАТЬИ КОНЕЦ  -->
+
+        <!-- ПОЛЕ С ТИПОМ СТАТЬИ НАЧАЛО  -->
+        <div class="post__form-field col-md-6" style="display: flex; flex-direction: column;">
+          <label class="post__form-label fst-italic" style="margin-bottom: 5px;">
+            <h5>Тип публикации</h5>
+          </label>
+          {% render_field form.type type="radio" id='type'%}
+          {{ form.type.errors }}
+        </div>
+        <!-- ПОЛЕ С ТИПОМ СТАТЬИ КОНЕЦ  -->
+      </div>
+
+
+      {% for hidden_field in form.hidden_fields %}
+      {% if hidden_field.errors %}
+      <ul>
+        {% for error in hidden_field.errors %}
+        <li>(hidden field {{ hidden_field.name }})</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {{hidden_field}}
+      {% endfor %}
+
+      <div class="row mb-4" style="margin-bottom: 5px;">
+        <!-- КНОПКА ПОДТВЕРЖДЕНИЯ ИЗМЕНЕНИЙ НАЧАЛО -->
+        <div class="col">
+          <button class="btn btn-sm btn-block btn-outline-dark mb-4 w-100" type="submit">
+            Применить правки
+          </button>
+        </div>
+        <!-- КНОПКА ПОДТВЕРЖДЕНИЯ ИЗМЕНЕНИЙ КОНЕЦ -->
+
+        <!-- КНОПКА УДАЛЕНИЯ СТАТЬИ НАЧАЛО -->
+        <div class="col">
+          <a href="{% url 'post_delete' post.id %}" class="btn btn-sm btn-block btn-outline-danger mb-4 w-100">
+            Удалить
+          </a>
+        </div>
+        <!-- КНОПКА УДАЛЕНИЯ СТАТЬИ КОНЕЦ -->
+      </div>
+
+    </form>
+
+
+    {% else %}
+
+    <h4>Похоже вы не авторизованны или у вас не хватает прав.</h4>
+
+    {% endif %}
+
+  </div>
+</main>
+
+
+
+
+
+
+
+{% endblock content %}
