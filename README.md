@@ -1,6 +1,6 @@
 <!-- Header section -->
 <p align="center">
- <img width="100px" src="https://github.com/XanderMoroz/GoodNews-DRF/tree/master/extras/Logo.png" align="center" alt="GitHub Readme Stats" />
+ <img width="100px" src="https://github.com/XanderMoroz/GoodNews-DRF/blob/master/extras/Logo.png" align="center" alt="GitHub Readme Stats" />
 </p>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
