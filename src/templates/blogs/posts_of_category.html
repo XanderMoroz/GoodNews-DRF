@@ -13,18 +13,21 @@ Posts of {{category_name}}
 
 <main class="container">
 
-    <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-200 position-relative text-bg-dark">
         <div class="col p-4 d-flex flex-column position-static">
-            <h3 class="mb-0 fst-italic">
-                Свежие публикации в разделе {{current_category.title}}
-            </h3>
+            <div class="hero_title col p-4 d-flex flex-column position-static">
+                <h3 class="mb-0 fst-italic">
+                    Свежие публикации в разделе {{current_category.title}}
+                </h3>
+            </div>
         </div>
 
         <div class="col-auto d-none d-lg-block">
-          <img class="bd-placeholder-img" width="200" height="200"
+          <img class="bd-placeholder-img" width="275" height="275"
                src="{{ current_category.image.url }}">
         </div>
 
+      </div>
     </div>
 
 
@@ -41,45 +44,6 @@ Posts of {{category_name}}
                     Continue reading
                 </a>
             </div>
-
-<!--            {% if request.user.is_authenticated %}-->
-
-<!--            <div class="subscribe-section">-->
-<!--                <h6 class="subscribe-header fst-italic">-->
-<!--                    Вы можете подписаться на новости одной из этих категорий:-->
-<!--                </h6>-->
-<!--                <div class="category-container" style="display: flex; flex-wrap: wrap;">-->
-
-<!--                    {%for category in post_detail.categories.all%}-->
-
-<!--                    <div class="category" style="margin-right: 10px; margin-bottom: 10px;">-->
-<!--                        <span>{{category}}</span>-->
-<!--                        {% if not user in category.subscribers.all %}-->
-<!--                        <button class="subscribe-btn rounded">-->
-<!--                            <a href="{% url 'subscribe' category.id %}">-->
-<!--                                Подписаться-->
-<!--                            </a>-->
-<!--                        </button>-->
-
-<!--                        {% else %}-->
-
-<!--                        <button class="unsubscribe-btn rounded">-->
-<!--                            <a href="{% url 'unsubscribe' category.id %}">-->
-<!--                                Отписаться-->
-<!--                            </a>-->
-<!--                        </button>-->
-
-<!--                        {%endif%}-->
-
-<!--                    </div>-->
-
-<!--                    {% endfor %}-->
-
-<!--                </div>-->
-
-<!--            </div>-->
-
-<!--            {% endif %}-->
 
             {% endfor %}
 

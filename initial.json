@@ -32,6 +32,7 @@
     "fields": {
       "user": 1,
       "photo": "images/avatars/john.png",
+      "creation_date": "2022-01-01T00:00:00Z",
       "author_rating": 0
     }
   },
@@ -41,6 +42,7 @@
     "fields": {
       "user": 2,
       "photo": "images/avatars/emma.png",
+      "creation_date": "2022-01-01T00:00:00Z",
       "author_rating": 0
     }
   },
@@ -50,6 +52,7 @@
     "fields": {
       "user": 3,
       "photo": "images/avatars/alex.png",
+      "creation_date": "2022-01-01T00:00:00Z",
       "author_rating": 0
     }
   },

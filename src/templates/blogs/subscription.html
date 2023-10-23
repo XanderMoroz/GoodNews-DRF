@@ -36,13 +36,22 @@ Category subscriptions
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary">{{ category.title }}</strong>
           <h3 class="mb-0"></h3>
-          {% for cat, num in post_dict.items %}
-          {% if cat == category.title %}
-          <div class="mb-1 text-body-secondary">{{ num }} articles available</div>
+
+          {% for cat, count in post_dict.items %}
+          {% if cat == category.id %}
+          <div class="mb-auto text-body-secondary">{{ count }} articles available</div>
           {% endif %}
           {% endfor %}
+
+          {% for cat, comments in category_comments.items %}
+          {% if cat == category.id %}
+          <p class="card-text mb-auto">{{comments.count }} comments </p>
+          {% endif %}
+          {% endfor %}
+
           <p class="card-text mb-auto">{{category.subscribers.count }} subscribers</p>
-          <p class="card-text mb-auto">{{category.subscribers.count }} subscribers</p>
+
+
 
 
           {% if not user in category.subscribers.all %}

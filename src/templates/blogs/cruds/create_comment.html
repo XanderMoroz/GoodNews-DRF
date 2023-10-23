@@ -1,13 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base/base.html' %}
+{% load custom_filters %} <!--Загружаем фильтры (чтобы использовать фильтр "ЦЕНЗОР") -->
+{% block title %}
+
+{% endblock title %}
+
+{% block content %}
+
+{% load static %}
+{% load thumbnail %}
+{% load widget_tweaks %}
+
+<main class="container">
+  <div class="row mb-2 form-group">
+<!--    <h3 class="display-15 pb-4 mt-4 mb-4 fst-italic border-bottom">Добавление комменария</h3>-->
+
 {% if user.is_authenticated %}
 
-               <div class="create_comment_section"
+               <div class="create_comment_section mt-4"
                     style="display: flex;">
                    <img class="align-self-start"
                                 style="margin-right: 0.75rem"
@@ -55,5 +64,7 @@
                    </form>
                </div>
                {% endif %}
-</body>
-</html>
+  </div>
+</main>
+
+{% endblock content %}

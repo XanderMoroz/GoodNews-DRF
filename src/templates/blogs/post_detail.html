@@ -38,7 +38,7 @@
                        <h5 class="comments-header fst-italic">
                            Comments
                        </h5>
-                       <a class="link-secondary border-bottom" href="#" aria-label="Profile">
+                       <a class="link-secondary border-bottom" href="{% url 'comment_create' post_id=post_detail.id %}" aria-label="Profile">
                            <img src="{% static 'images/icons/plus-solid.svg' %}"
                                 alt="Create" width="20" height="20" class="mx-3">
                        </a>
@@ -78,7 +78,7 @@
                <h3 class="pb-4 mb-4 fst-italic border-bottom">
                    Similar Posts
                </h3>
-               {% for post in similar_posts %}
+               {% for post in same_author_posts %}
                <article class="blog-post">
 
                    <h2 class="blog-post-title mb-3">{{ post.title }}</h2>

@@ -1,13 +1,13 @@
 from django import forms
-
 from src.my_apps.blogs.models import Author
 
 
 class ProfileForm(forms.ModelForm):
-    """Форма для редактирования профиля"""
-
+    """
+    Form for editing profile
+    """
     class Meta:
         model = Author
-        fields = ['user', 'photo',]
-        labels = {'photo': "Ваш аватар",}
-        widgets = {'user': forms.HiddenInput(),}
+        fields = ['user', 'photo']
+        labels = {'photo': "Ваш аватар"}
+        widgets = {'user': forms.HiddenInput()}
