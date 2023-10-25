@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Third party apps
     'widget_tweaks',
     'easy_thumbnails',
+
     # My apps
     'src.my_apps.blogs',
     'src.my_apps.profiles',
@@ -148,3 +149,33 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'src/media'
+
+#
+# # формат даты, которую будет воспринимать наш задачник (вспоминаем модуль по фильтрам)
+# APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+#
+# # если задача не выполняется за 25 секунд, то она автоматически снимается, можете поставить время побольше,
+# # но как правило, это сильно бьёт по производительности сервера
+# APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+"""
+Celery settings
+pip install eventlet 
+и запускать celery через команду: celery -A Ваш проект worker -l info -P eventlet
+"""
+# # указывает на URL брокера сообщений (Redis). По умолчанию он находится на порту 6379.
+# CELERY_BROKER_URL = 'redis://:YLaaMKbdSS68cAvnlcqPiKWKihXXEFrp@redis-18941.c232.us-east-1-2.ec2.cloud.redislabs.com:18941/0'
+# # указывает на хранилище результатов выполнения задач.
+# CELERY_RESULT_BACKEND = 'redis://:YLaaMKbdSS68cAvnlcqPiKWKihXXEFrp@redis-12880.c283.us-east-1-4.ec2.cloud.redislabs.com:12880/0'
+# # допустимый формат данных.
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# # метод сериализации задач.
+# CELERY_TASK_SERIALIZER = 'json'
+# # метод сериализации результатов.
+# CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+RESULT_BACKEND = 'redis://localhost:6379'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
