@@ -10,7 +10,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'src.settings')
 
 app = Celery('GoodNews')
 # app.config_from_object(settings, namespace='CELERY')
-app.conf.broker_url = 'amqp://localhost:5672'
+app.conf.broker_url = 'amqp://rabbitmq:5672'
 app.conf.accept_content = ['application/json']
 app.conf.task_serializer = 'json'
 app.conf.result_serializer = 'json'

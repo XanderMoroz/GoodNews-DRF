@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   web:
     build:
       context: .
@@ -13,32 +12,47 @@ services:
       - ./:/app
     ports:
       - 8000:8000
+    depends_on:
+      - rabbitmq
+      - celery-worker
     networks:
-        - goodnews-network
+      - goodnews-network
 
   postgres:
     image: postgres:15-alpine
-    # Проверка состояния бд.
-#    healthcheck:
-#      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=goodnews
-#      - POSTGRES_EXTENSIONS=pg_trgm
-    # Внутри контейнера монтируем том "postgres-data".
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    # Подключаемся к общей сети
+    networks:
+      - goodnews-network
+
+  rabbitmq:
+    image: rabbitmq:3.9.10-management
+    ports:
+#      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - goodnews-network
+
+  celery-worker:
+    build:
+      context: .
+      args:
+        REQUIREMENTS_FILE: reqs.txt
+    command: celery -A src worker --loglevel=info
+    volumes:
+      - ./:/app
     networks:
       - goodnews-network
 
 volumes:
-
   postgres-data:
+  rabbitmq-data:
 
 networks:
   goodnews-network:
