@@ -12,7 +12,8 @@
       <h2 class="mb-4">Изменение аватара</h2>
       <img class="post__avatar align-self-start" style="margin-right: 0.75rem" src="{% thumbnail current_profile.photo 200x200 crop %}" alt="Profile image">
       <form class="justify-content-center"
-            method="POST" autocomplete="off">
+            method="POST" autocomplete="off"
+            enctype="multipart/form-data">
         {% csrf_token %}
         {{form}}
         <div class="profile__form-field mb-4 d-flex flex-column">
