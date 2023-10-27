@@ -1,16 +1,19 @@
 # В первую очередь мы импортируем библиотеку для работы с операционной системой и саму библиотеку Celery.
 import os
+import dotenv
+
 from celery import Celery
 from celery.schedules import crontab
 
-from src import settings
+
+dotenv.load_dotenv(dotenv.find_dotenv())
 
 # Второй строчкой мы связываем настройки Django с настройками Celery через переменную окружения.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'src.settings')
 
 app = Celery('GoodNews')
 # app.config_from_object(settings, namespace='CELERY')
-app.conf.broker_url = 'amqp://rabbitmq:5672'
+app.conf.broker_url = f'amqp://{os.environ.get("CELERY_BROKER_HOST")}:5672'
 app.conf.accept_content = ['application/json']
 app.conf.task_serializer = 'json'
 app.conf.result_serializer = 'json'
