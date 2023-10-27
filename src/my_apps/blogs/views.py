@@ -250,7 +250,7 @@ class CategoriesSubscription(ListView, FormMixin):
         for category in list_of_categories:
             comment_counts = Post.objects.filter(
                 categories__id=category.pk
-            ).annotate(num_comments=Count('comment'))
+            ).annotate(num_comments=Count('comments'))
             category_comments[category.pk] = comment_counts
         context['category_comments'] = category_comments
         return context
