@@ -44,40 +44,22 @@
          </h3>
        </div>
 
+         {% if error_message %}
+        <p>{{ error_message }}</p>
+        {% endif %}
 
        <form method="POST" class="" style="width: 100%">
-         {% csrf_token %}
-           {{form}}
-<!--         &lt;!&ndash; username field start  &ndash;&gt;-->
-<!--         <div class="post__form-field mb-4" style="display: flex; flex-direction: column;">-->
-<!--           <label class="post__form-label fst-italic" style="margin-bottom: 5px;"-->
-<!--                  for="username">-->
-<!--             Имя пользователя:-->
-<!--           </label>-->
-<!--           <input type="text" id="username" name="username" required>-->
-<!--         </div>-->
-<!--         &lt;!&ndash; username field stop  &ndash;&gt;-->
-
-<!--         &lt;!&ndash; password field start  &ndash;&gt;-->
-<!--         <div class="post__form-field mb-4" style="display: flex; flex-direction: column;">-->
-<!--           <label class="post__form-label fst-italic" style="margin-bottom: 5px;"-->
-<!--                  for="password">-->
-<!--             Пароль-->
-<!--           </label>-->
-<!--           <input type="password" id="password" name="password" required>-->
-<!--         </div>-->
-<!--         &lt;!&ndash; password field stop  &ndash;&gt;-->
-
+          {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
 <!--         &lt;!&ndash; Теперь нам нужна только готовая форма и кнопка &ndash;&gt;-->
          <div class="post__form-field" style="display: flex; flex-direction: column;">
-           <button class="btn btn-sm btn-block btn-outline-dark" type="submit">
+           <button class="btn btn-sm btn-block btn-outline-dark" type="submit" value="Login">
              Войти
            </button>
          </div>
-
-<!--         {% if error %}-->
-<!--         <p>{{ error }}</p>-->
-<!--         {% endif %}-->
 
        </form>
 

@@ -54,31 +54,21 @@ class SignupView(FormView):
         form.save()
         return redirect('login')
 
-class LoginView(FormView):
-    """
-    View for user login.
-    """
-    form_class = AuthenticationForm
-    template_name = 'profiles/login.html'
 
-    def form_valid(self, form):
-        """
-        Authenticates user credentials and logs in the user.
-        Redirects to the user's profile page upon successful login.
-        """
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        user = authenticate(self.request, username=username, password=password)
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
         if user is not None:
-            login(self.request, user)
-            return redirect('profile')
+            login(request, user)
+            return redirect('profile')  # Перенаправление на вашу домашнюю страницу после успешной авторизации
         else:
-            return render(
-                self.request,
-                'profiles/login.html',
-                {
-                    'form': form,
-                    'error': 'Invalid username or password'})
+            error_message = 'Invalid username or password'
+            return render(request, 'profiles/login.html', {'error_message': error_message})
+    else:
+        return render(request, 'profiles/login.html')
 
 class LogoutView(View):
     """
