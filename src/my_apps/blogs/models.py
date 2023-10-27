@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
+from django.urls import reverse
 from easy_thumbnails.fields import ThumbnailerImageField
 
 
@@ -12,6 +13,9 @@ class Author(models.Model):
     photo = ThumbnailerImageField(upload_to='images/avatars', blank=True)
     creation_date = models.DateTimeField(verbose_name='Время создания', auto_now_add=True)
     author_rating = models.IntegerField(default=0)
+
+    def get_absolute_url(self):
+        return reverse('profile')
 
     class Meta:
         verbose_name = 'Автор'

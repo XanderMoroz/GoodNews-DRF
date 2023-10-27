@@ -153,9 +153,4 @@ MEDIA_ROOT = BASE_DIR / 'src/media'
 
 # CELERY SETTINGS
 # To run worker: celery -A <proj-name> worker -l info -P eventlet
-RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST"),
-
-# RESULT_BACKEND = 'redis://localhost:6379'
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST")
