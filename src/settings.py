@@ -44,10 +44,15 @@ INSTALLED_APPS = [
     # Third party apps
     'widget_tweaks',
     'easy_thumbnails',
+    'rest_framework',
+    "rest_framework.authtoken",
+    "rest_framework_simplejwt",
+    'drf_yasg',
 
     # My apps
     'src.my_apps.blogs',
     'src.my_apps.profiles',
+    'src.my_apps.api',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +159,11 @@ MEDIA_ROOT = BASE_DIR / 'src/media'
 # CELERY SETTINGS
 # To run worker: celery -A <proj-name> worker -l info -P eventlet
 RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST")
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        # АУТЕНТИФИКАЦИЯ ПО СЕССИИ (ПО УМОЛЧАНИЮ)
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    )
+}
