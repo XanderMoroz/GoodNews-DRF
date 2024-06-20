@@ -219,7 +219,7 @@ sudo docker exec -it goodnews-drf_web_1 python manage.py createsuperuser
 
 
 <details>
-<summary>Как подключиться  к БД? </summary>
+<summary>Как подключиться Брокеру сообщений RabbitMQ? </summary>
 
 
 1. Заходим в браузер по адресу http://127.0.0.1:15672/ и вводим данные из docker-compose.yml
