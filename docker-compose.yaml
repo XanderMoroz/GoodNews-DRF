@@ -1,58 +1,137 @@
 version: '3'
 services:
   web:
+    container_name: "goodNews-app"                              # Название контейнера
     build:
-      context: .
+      context: .                                                # Образ контейнера берем из текущей папки
       args:
         REQUIREMENTS_FILE: reqs.txt
-    restart: always
     env_file: .env
     command: bash -c "python manage.py migrate && python manage.py loaddata initial.json && python manage.py createsuperuser && python manage.py runserver 0.0.0.0:8000"
-    volumes:
+    volumes:                                                    # Монтируем том с приложением
       - ./:/app
-    ports:
+    ports:                                                      # Связываем порты хоста:контейнера
       - 8000:8000
+    restart: on-failure                                         # Перезапускаем при ошибке
     depends_on:
       - rabbitmq
       - celery-worker
-    networks:
-      - goodnews-network
+    networks:                                                   # Подключаем к сети
+      - goodNews-network
 
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=goodnews
-    volumes:
+  good_news-postgres:
+    container_name: "goodNews-postgres"                         # Название контейнера
+    image: postgres:15.7-alpine                                 # Название:версия образа (postgres:15.7-alpine)
+    environment:                                                # Берем из .env
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+    ports:                                                      # Связываем порты хоста:контейнера
+      - "5432:5432"
+    volumes:                                                    # Монтируем том с данными из БД
       - postgres-data:/var/lib/postgresql/data
+    networks:                                                   # Подключаем к сети
+      - goodNews-network
+
+  pgadmin:
+    container_name: pgadmin_container                           # Название контейнера
+    image: dpage/pgadmin4                                       # Название:версия образа
+    environment: # Берем из .env
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"                                               # Связываем порты хоста:контейнера
+    depends_on:
+      - good_news-postgres                                       # Ставим в зависимость от БД
     networks:
-      - goodnews-network
+      - goodNews-network                                        # Подключаем к сети
+    restart: unless-stopped
 
   rabbitmq:
-    image: rabbitmq:3.9.10-management
-    ports:
-#      - 5672:5672
-      - 15672:15672
-    volumes:
+    container_name: "goodNews-rabbitmq"                         # Название контейнера
+    image: rabbitmq:3.10.7-management                           # Название:версия образа (rabbitmq:3.10.7-management)
+    ports:                                                      # Связываем порты хоста:контейнера
+      - "5672:5672"
+      - "15672:15672"
+    volumes:                                                    # Монтируем том с данными из rabbitmq
       - rabbitmq-data:/var/lib/rabbitmq
-    networks:
-      - goodnews-network
+    networks:                                                   # Подключаем к сети
+      - goodNews-network
 
   celery-worker:
+    container_name: "goodNews-celery-worker"                    # Название контейнера
     build:
-      context: .
+      context: .                                                # Образ контейнера берем из текущей папки
       args:
         REQUIREMENTS_FILE: reqs.txt
     command: celery -A src worker --loglevel=info
-    volumes:
+    volumes:                                                    # Монтируем том с данными из rabbitmq
       - ./:/app
+    networks:                                                   # Подключаем к сети
+      - goodNews-network
+
+  prometheus:
+    container_name: prometheus                                  # Система мониторинга
+    image: prom/prometheus:latest
+    volumes:
+      - ./etc/prometheus:/etc/prometheus/                       # Монтируем том с данными из БД
+    hostname: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml            # Устанавливаем конфигурацию из файла prometheus.yml
+    ports:
+      - 9090:9090                                               # Связываем порты хоста:контейнера
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
     networks:
-      - goodnews-network
+      - goodNews-network
+
+  # Извлекает данные хоста (cpu, memory)
+  node-exporter:
+    container_name: exporter
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    hostname: exporter
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points
+      - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+    ports:
+      - 9100:9100
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      - goodNews-network
+
+  # Визуализация данных на дашборде
+  grafana:
+    image: grafana/grafana
+    user: root
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./etc/grafana:/var/lib/grafana
+      - ./etc/grafana/provisioning/:/etc/grafana/provisioning/
+    container_name: grafana
+    hostname: grafana
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      - goodNews-network
+
 
 volumes:
   postgres-data:
   rabbitmq-data:
 
 networks:
-  goodnews-network:
+  goodNews-network:

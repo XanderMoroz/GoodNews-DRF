@@ -27,7 +27,11 @@ GoodNews представляет собой веб-портал на основ
 База данных - `PostgreSQL`. ORM - `DjangoORM`. 
 Асинхронные задачи - `Celery`. Брокер сообщений - `RabbitMQ`. 
 Интерфейс - `Jinja2`, `HTML`, `CSS`, `JavaScript`.
-Контейнеризация - `Docker`. Зависимости - `Poetry`. Линтер - `Flake8`.
+Контейнеризация - `Docker-Compose`. Зависимости - `Poetry`. Линтер - `Flake8`.
+Мониторинг - `Prometheus`. Метрики хоста - `Node Exporter`. Визуализация - `Grafana`.
+
+
+![Screen Shot](extras/GN-schema.png)
 
 ## <a name="features"> 🌟 Возможности сервиса </a>
 
@@ -160,15 +164,35 @@ git clone https://github.com/XanderMoroz/GoodNews-DRF.git
 1.3 Заполняете файл .env по следующему шаблону:
 
 ```sh
-# DJANGO DEFAULT SETTINGS
+################################################################################
+# DJANGO APP Config
+# Automatically setup app variables
+################################################################################
 SECRET_KEY='django-insecure-#)!-t1b(7&wr_7c%0m%w$(y@^#z6wizw^trm$dtz70@m1fe$6*'
-
-# POSTGRESQL DEFAULT DATABASE
-POSTGRES_USER=postgres
-POSTGRES_PASS=postgres
-POSTGRES_HOST=postgres  #localhost(при использовании локально)  
-POSTGRES_PORT=5432
-POSTGRES_DB=goodnews
+DJANGO_SUPERUSER_USERNAME=root
+DJANGO_SUPERUSER_EMAIL=root@root.com
+DJANGO_SUPERUSER_PASSWORD=123
+################################################################################
+# POSTGRESQL Config
+# Automatically create database and user
+################################################################################
+DB_NAME="goodNews"
+DB_USER="xander"
+DB_PASSWORD="pass:123"
+DATABASE_PORT=5432
+DATABASE_HOST="localhost"               # при использовании локально
+DATABASE_HOST="goodNews-postgres"       # при использовании c Docker
+################################################################################
+# PGADMIN Config
+# Automatically setup interface for DB
+################################################################################
+PGADMIN_DEFAULT_EMAIL=xander@admin.com
+PGADMIN_DEFAULT_PASSWORD=pwd123
+################################################################################
+# CELERY BROKER Config
+# Automatically setup message broker for celery
+################################################################################
+CELERY_BROKER_HOST=rabbitmq
 
 ```
 2. ### Запуск проекта с Doker
@@ -181,8 +205,94 @@ sudo docker-compose up -d
 sudo docker exec -it goodnews-drf_web_1 python manage.py createsuperuser
 ```
 2.3 Сервис доступен по адресу: http://0.0.0.0:8000/
+2.3 Сервисы доступны для эксплуатации:
 
-## <a name="tests"> 💯 Тесты
+- Приложение Python `Django APP`: http://127.0.0.1:8080/
+- Брокер сообщений `RabbitMQ`: http://127.0.0.1:15672/
+- Интерфейс для управления БД Postgres `PGAdmin4`: http://127.0.0.1:5050                    
+- Система мониторинга (сбора метрик) `Prometheus`: http://127.0.0.1:9090                  
+- Извлекает метрики хоста (cpu-, memory-usage) для мониторинга `Node Exporter`: http://127.0.0.1:9100/              
+- Аналитическая система (визиализирует данные в виде дашбордов) `Grafana`: http://127.0.0.1:3000                     
+
+
+3. ### Дополнительные настройки 
+
+<details>
+<summary>Как подключить PGAdmin4 к БД? </summary>
+
+
+1. Заходим в браузер по адресу http://127.0.0.1:5050 и вводим данные из .env
+
+```bash
+PGADMIN_DEFAULT_EMAIL=xander@admin.com
+PGADMIN_DEFAULT_PASSWORD=pwd123
+```
+![Screen Shot](docs/extras/pgadmin_auth.jpg)
+
+2. Заполняем Имя сервера (обязательно) 
+
+![Screen Shot](docs/extras/pgadmin_settings_01.jpg)
+
+3. Извлекаем адрес хоста, на котором расположилась БД Postgres
+
+```bash
+sudo docker inspect go_blog_postgres | grep IPAddress
+```
+![Screen Shot](docs/extras/pgadmin_get_host.jpg)
+
+4. Заполняем Адрес сервера данными хоста БД Postgres и пароль (из файла .env)
+
+![Screen Shot](docs/extras/pgadmin_settings_02.jpg)
+
+6. Готово
+
+![Screen Shot](docs/extras/pgadmin_ready.jpg)
+
+</details>
+
+
+<details>
+<summary>Как подключить Grafana к Prometheus? </summary>
+
+
+1. Заходим в браузер по адресу http://127.0.0.1:3000 и вводим данные по умолчанию:
+
+  - Email or username: admin
+  - Password: admin
+
+![Screen Shot](docs/extras/geafana_auth_01.jpg)
+
+2. После система потребует придумать новый пароль (это необязательно).
+
+![Screen Shot](docs/extras/geafana_auth_02.jpg)
+
+3. Мы авторизованы в сервисе Grafana. Добавим новое подключение...
+
+![Screen Shot](docs/extras/grafana_settings_01.jpg)
+
+4. Ищем в списке Prometheus и кликаем по нему
+
+![Screen Shot](docs/extras/grafana_settings_02.jpg)
+
+5. Теперь его нужно настроить
+
+![Screen Shot](docs/extras/grafana_settings_03.jpg)
+
+7. Извлекаем адрес хоста, на котором расположился Prometheus
+
+```bash
+sudo docker inspect prometheus | grep IPAddress
+```
+![Screen Shot](docs/extras/grafana_get_host.jpg)
+
+8. Заполняем Адрес сервера Prometheus данными хоста 
+
+![Screen Shot](docs/extras/grafana_settings_04.jpg)
+
+9. Готово
+
+</details>
+
 
 
 

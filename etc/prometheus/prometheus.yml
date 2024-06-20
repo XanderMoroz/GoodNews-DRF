@@ -1,0 +1,7 @@
+scrape_configs:
+
+  - job_name: node                      # Название мониторинговой задачи
+    scrape_interval: 5s                 # Интервал извлечения данных
+    static_configs:
+    # Источник данных
+    - targets: ['node-exporter:9100']   # Извлекает данные хоста (cpu, memory)
