@@ -54,6 +54,9 @@ services:
     ports:                                                      # Связываем порты хоста:контейнера
       - "5672:5672"
       - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
     volumes:                                                    # Монтируем том с данными из rabbitmq
       - rabbitmq-data:/var/lib/rabbitmq
     networks:                                                   # Подключаем к сети

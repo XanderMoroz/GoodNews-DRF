@@ -204,7 +204,7 @@ sudo docker-compose up -d
 ```sh
 sudo docker exec -it goodnews-drf_web_1 python manage.py createsuperuser
 ```
-2.3 Сервис доступен по адресу: http://0.0.0.0:8000/
+
 2.3 Сервисы доступны для эксплуатации:
 
 - Приложение Python `Django APP`: http://127.0.0.1:8080/
@@ -217,6 +217,27 @@ sudo docker exec -it goodnews-drf_web_1 python manage.py createsuperuser
 
 3. ### Дополнительные настройки 
 
+
+<details>
+<summary>Как подключиться  к БД? </summary>
+
+
+1. Заходим в браузер по адресу http://127.0.0.1:15672/ и вводим данные из docker-compose.yml
+
+```bash
+RABBITMQ_DEFAULT_USER=guest
+RABBITMQ_DEFAULT_PASS=guest
+```
+![Screen Shot](extras/rabbitmq_auth.png)
+
+2. Готово
+
+![Screen Shot](extras/rabbitmq_ready.png)
+
+</details>
+
+
+
 <details>
 <summary>Как подключить PGAdmin4 к БД? </summary>
 
@@ -227,26 +248,26 @@ sudo docker exec -it goodnews-drf_web_1 python manage.py createsuperuser
 PGADMIN_DEFAULT_EMAIL=xander@admin.com
 PGADMIN_DEFAULT_PASSWORD=pwd123
 ```
-![Screen Shot](docs/extras/pgadmin_auth.jpg)
+![Screen Shot](extras/pgadmin_auth.jpg)
 
 2. Заполняем Имя сервера (обязательно) 
 
-![Screen Shot](docs/extras/pgadmin_settings_01.jpg)
+![Screen Shot](extras/pgadmin_settings_01.jpg)
 
 3. Извлекаем адрес хоста, на котором расположилась БД Postgres
 
 ```bash
 sudo docker inspect go_blog_postgres | grep IPAddress
 ```
-![Screen Shot](docs/extras/pgadmin_get_host.jpg)
+![Screen Shot](extras/pgadmin_get_host.jpg)
 
 4. Заполняем Адрес сервера данными хоста БД Postgres и пароль (из файла .env)
 
-![Screen Shot](docs/extras/pgadmin_settings_02.jpg)
+![Screen Shot](extras/pgadmin_settings_02.jpg)
 
 6. Готово
 
-![Screen Shot](docs/extras/pgadmin_ready.jpg)
+![Screen Shot](extras/pgadmin_ready.jpg)
 
 </details>
 
@@ -260,40 +281,38 @@ sudo docker inspect go_blog_postgres | grep IPAddress
   - Email or username: admin
   - Password: admin
 
-![Screen Shot](docs/extras/geafana_auth_01.jpg)
+![Screen Shot](extras/geafana_auth_01.jpg)
 
 2. После система потребует придумать новый пароль (это необязательно).
 
-![Screen Shot](docs/extras/geafana_auth_02.jpg)
+![Screen Shot](extras/geafana_auth_02.jpg)
 
 3. Мы авторизованы в сервисе Grafana. Добавим новое подключение...
 
-![Screen Shot](docs/extras/grafana_settings_01.jpg)
+![Screen Shot](extras/grafana_settings_01.jpg)
 
 4. Ищем в списке Prometheus и кликаем по нему
 
-![Screen Shot](docs/extras/grafana_settings_02.jpg)
+![Screen Shot](extras/grafana_settings_02.jpg)
 
 5. Теперь его нужно настроить
 
-![Screen Shot](docs/extras/grafana_settings_03.jpg)
+![Screen Shot](extras/grafana_settings_03.jpg)
 
 7. Извлекаем адрес хоста, на котором расположился Prometheus
 
 ```bash
 sudo docker inspect prometheus | grep IPAddress
 ```
-![Screen Shot](docs/extras/grafana_get_host.jpg)
+![Screen Shot](extras/grafana_get_host.jpg)
 
 8. Заполняем Адрес сервера Prometheus данными хоста 
 
-![Screen Shot](docs/extras/grafana_settings_04.jpg)
+![Screen Shot](extras/grafana_settings_04.jpg)
 
 9. Готово
 
 </details>
-
-
 
 
 ## <a name="license"> ©️ License
